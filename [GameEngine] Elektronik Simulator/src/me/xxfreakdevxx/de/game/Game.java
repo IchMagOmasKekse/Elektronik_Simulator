@@ -6,12 +6,10 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
-import me.xxfreakdevxx.de.game.object.ID;
-import me.xxfreakdevxx.de.game.object.block.StoneWallBlock;
-import me.xxfreakdevxx.de.game.object.entity.Monster;
-import me.xxfreakdevxx.de.game.object.entity.Player;
+import me.xxfreakdevxx.de.game.showroom.DebugScene;
+import me.xxfreakdevxx.de.game.showroom.ShowRoom;
 
-@SuppressWarnings("serial")
+@SuppressWarnings({ "unused", "serial" })
 public class Game extends Canvas implements Runnable {
 	
 	/* Window */
@@ -46,9 +44,23 @@ public class Game extends Canvas implements Runnable {
 		textureAtlas = new TextureAtlas();
 		this.addKeyListener(new KeyInput(handler));
 		this.addMouseListener(new MouseInput());
+
+		preInit();
+		init();
+		postInit();
 		
-		level = textureAtlas.loadImage("/wizard_level.png");
-		loadLevel(level);
+//		level = textureAtlas.loadImage("/wizard_level.png");
+//		loadLevel(level);
+	}
+	
+	public void preInit() {
+		
+	}
+	public void init() {
+		
+	}
+	public void postInit() {
+		new ShowRoom();
 	}
 	
 	private void start() {
@@ -64,7 +76,6 @@ public class Game extends Canvas implements Runnable {
 	}
 	
 	
-	@SuppressWarnings("unused")
 	@Override
 	public void run() {
 		/*
@@ -99,9 +110,7 @@ public class Game extends Canvas implements Runnable {
 	
 	public void tick() {
 		for(int i = 0; i < handler.object.size(); i++) {
-			if(handler.object.get(i).getId() == ID.PLAYER) {
-				camera.tick(handler.object.get(i));
-			}
+			
 		}
 		handler.tick();
 	}
@@ -134,9 +143,9 @@ public class Game extends Canvas implements Runnable {
 				int green = (pixel >> 8) & 0xff;
 				int blue = (pixel) & 0xff;
 				
-				if(red == 255) handler.addObject(new StoneWallBlock(ID.BLOCK, new Location(xx*blocksize, yy*blocksize), 32, 32));
-				if(green == 255) handler.addObject(new Monster(ID.ENEMY, new Location(xx*blocksize, yy*blocksize), 32, 32, 15.0D));
-				if(blue == 255) handler.addObject(new Player(ID.PLAYER, new Location(xx*blocksize, yy*blocksize), 100.0D));
+//				if(red == 255) handler.addObject(new StoneWallBlock(ID.BLOCK, new Location(xx*blocksize, yy*blocksize), 32, 32));
+//				if(green == 255) handler.addObject(new Monster(ID.ENEMY, new Location(xx*blocksize, yy*blocksize), 32, 32, 15.0D));
+//				if(blue == 255) handler.addObject(new Player(ID.PLAYER, new Location(xx*blocksize, yy*blocksize), 100.0D));
 			}
 		}
 	}

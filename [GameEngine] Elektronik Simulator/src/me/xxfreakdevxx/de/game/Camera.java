@@ -1,6 +1,6 @@
 package me.xxfreakdevxx.de.game;
 
-import me.xxfreakdevxx.de.game.object.GameObject;
+import me.xxfreakdevxx.de.game.electricity.EComp;
 
 public class Camera {
 	private float x,y;
@@ -10,7 +10,7 @@ public class Camera {
 		this.y=y;
 	}
 	
-	public void tick(GameObject object) {
+	public void tick(EComp object) {
 		x += ((object.getLocation().getX() - x) - Game.windowWidth/2) * 0.05f;
 		y += ((object.getLocation().getY() - y) - Game.windowHeight/2) * 0.05f;
 	

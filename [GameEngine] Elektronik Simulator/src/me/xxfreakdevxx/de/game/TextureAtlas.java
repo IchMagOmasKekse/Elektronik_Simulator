@@ -6,8 +6,6 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
-import me.xxfreakdevxx.de.game.object.Material;
-
 public class TextureAtlas {
 	
 	private BufferedImage image;
@@ -29,10 +27,6 @@ public class TextureAtlas {
 	public void reloadTextures() {
 		/* Lädt alle Texturen neu und fügt sie zum Atlas(textures(hashmap)) hinzu */
 		textures.clear();
-		for(int i = 0; i < Material.values().length; i++) {
-			Material material = Material.values()[i];
-			textures.put(material.getName(), loadImage("/"+material.getName()+".png"));
-		}
 		textures.put("monster", loadImage("/monster.png"));
 	}
 	

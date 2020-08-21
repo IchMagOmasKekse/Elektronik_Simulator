@@ -2,36 +2,28 @@ package me.xxfreakdevxx.de.game;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
-import me.xxfreakdevxx.de.game.object.GameObject;
+import me.xxfreakdevxx.de.game.electricity.EComp;
+import me.xxfreakdevxx.de.game.showroom.ShowRoom;
 
 public class Handler {
 	/* Lagert alle GameObject in einer Liste */
-	public LinkedList<GameObject> object = new LinkedList<GameObject>();
+	public LinkedList<EComp> object = new LinkedList<EComp>();
 	
 	private boolean up = false, down = false, right = false, left = false;
 	
 	
 	public void tick() {
-		for(int i = 0; i < object.size(); i++) {
-			GameObject tempObject = object.get(i);
-			
-			tempObject.tick();
-		}
+		ShowRoom.tick();
 	}
 	
 	public void render(Graphics g) {
-		for(int i = 0; i < object.size(); i++) {
-			GameObject tempObject = object.get(i);
-			
-			tempObject.render(g);
-		}
-
+		ShowRoom.render(g);
 	}
 	
-	public void addObject(GameObject tempObject) {
+	public void addObject(EComp tempObject) {
 		object.add(tempObject);
 	}
-	public void removeObject(GameObject tempObject) {
+	public void removeObject(EComp tempObject) {
 		object.remove(tempObject);
 	}
 
