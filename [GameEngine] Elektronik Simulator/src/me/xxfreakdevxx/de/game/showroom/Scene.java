@@ -12,5 +12,6 @@ public abstract class Scene {
 	public abstract void render(Graphics g);
 	public abstract void tick();
 	public abstract void addCircuitBoard(CircuitBoard board);
+	public abstract CircuitBoard getCircuitBoard();
 	
 }

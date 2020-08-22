@@ -4,6 +4,7 @@ import me.xxfreakdevxx.de.game.electricity.EComp;
 
 public class Camera {
 	private float x,y;
+	public static boolean stayPositiveCoords = false;
 	
 	public Camera(float x, float y) {
 		this.x=x;
@@ -13,11 +14,25 @@ public class Camera {
 	public void tick(EComp object) {
 		x += ((object.getLocation().getX() - x) - Game.windowWidth/2) * 0.05f;
 		y += ((object.getLocation().getY() - y) - Game.windowHeight/2) * 0.05f;
-	
-		if(x <= 0) x = 0; 
-		if(x >= (Game.windowWidth + 32)) x = (Game.windowWidth+32);
-		if(y <= 0) y = 0; 
-		if(x >= (Game.windowHeight + 16)) x = (Game.windowHeight+16);
+		
+		if(stayPositiveCoords) {			
+			if(x <= 0) x = 0; 
+			if(x >= (Game.windowWidth + 32)) x = (Game.windowWidth+32);
+			if(y <= 0) y = 0; 
+			if(x >= (Game.windowHeight + 16)) x = (Game.windowHeight+16);
+		}
+	}
+	GameVector mouseMove = null;
+	public void tickMouse() {
+		x += ((MouseMotion.mouse_x) - Game.windowWidth/2) * 0.05f;
+		y += ((MouseMotion.mouse_y) - Game.windowHeight/2) * 0.05f;
+		
+		if(stayPositiveCoords) {			
+			if(x <= 0) x = 0; 
+			if(x >= (Game.windowWidth + 32)) x = (Game.windowWidth+32);
+			if(y <= 0) y = 0; 
+			if(x >= (Game.windowHeight + 16)) x = (Game.windowHeight+16);
+		}
 	}
 
 	public float getX() {

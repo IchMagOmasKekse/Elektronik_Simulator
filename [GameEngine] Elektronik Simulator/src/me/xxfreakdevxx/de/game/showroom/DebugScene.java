@@ -22,7 +22,7 @@ public class DebugScene extends Scene {
 		
 	}
 	public void postInit() {
-		addCircuitBoard(new CircuitBoard(150, 60));
+		addCircuitBoard(new CircuitBoard(30, 20));
 	}
 	
 	@Override
@@ -38,6 +38,11 @@ public class DebugScene extends Scene {
 	@Override
 	public void addCircuitBoard(CircuitBoard board) {
 		this.board = board;
+	}
+
+	@Override
+	public CircuitBoard getCircuitBoard() {
+		return board;
 	}
 
 }

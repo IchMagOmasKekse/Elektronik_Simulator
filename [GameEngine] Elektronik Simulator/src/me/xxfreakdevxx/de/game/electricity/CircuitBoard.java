@@ -3,8 +3,10 @@ package me.xxfreakdevxx.de.game.electricity;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 
+import me.xxfreakdevxx.de.game.Game;
 import me.xxfreakdevxx.de.game.Location;
 
 public class CircuitBoard extends EComp{
@@ -13,26 +15,37 @@ public class CircuitBoard extends EComp{
 	public int pins_row = 0;
 	public int pins_column = 0;
 	public Color background_color = new Color(21, 176, 0);
+	public boolean showCopperSide = false;
 	
 	
-	public CircuitBoard(int width, int height) {
-		super(new Location(50, 50), width, height);
+	public CircuitBoard(int pins_row, int pin_column) {
+		super(new Location((Game.windowWidth/2-(calcWidth(pins_row)/2)), (Game.windowHeight/2-(calcHeight(pin_column)/2))), calcWidth(pins_row), calcHeight(pin_column));
 		System.out.println("CircuitBoard wird geladen...");
 		this.pins_row = width / (Config.pin_size + Config.space_between_pins);
 		this.pins_column = height / (Config.pin_size + Config.space_between_pins);
 		
+		name = "Platine "+width+"px  X "+height+"px";
+		
 		generatePins();
+	}
+	
+	public static int calcWidth(int pins_row) {
+		return (pins_row * Config.pin_size) + ((pins_row + 1) * Config.space_between_pins);
+	}
+	public static int calcHeight(int pins_column) {
+		return (pins_column * Config.pin_size) + ((pins_column + 1) * Config.space_between_pins);
 	}
 	
 	public void generatePins() {
 		int index = 0;
 		for(int r = 0; r != pins_row; r++) {
 			for(int c = 0; c != pins_column; c++) {
-				pins.put(index, new Pin("Pin "+index,
-									Config.space_between_pins+(index*Config.pin_size),
-									Config.space_between_pins+(c*Config.pin_size),
+				pins.put(index, new Pin("P"+index,
+									getLocation().getIntX()+(r*Config.space_between_pins+(r*Config.pin_size))+Config.space_between_pins,
+									getLocation().getIntY()+(c*Config.space_between_pins+(c*Config.pin_size))+Config.space_between_pins,
 									Config.pin_size,
-									Config.pin_size));
+									Config.pin_size,
+									this).setColor(Color.GRAY));
 				index++;
 			}
 			index++;
@@ -42,6 +55,10 @@ public class CircuitBoard extends EComp{
 
 	@Override
 	public void tick() {
+		
+		for(int i : pins.keySet()) {
+			pins.get(i).tick();
+		}
 		
 		//Update Komponenten
 		if(ecomps.isEmpty() == false) {			
@@ -54,8 +71,22 @@ public class CircuitBoard extends EComp{
 	@Override
 	public void render(Graphics g) {
 		
-		g.setColor(background_color);
-		g.fillRect(body.x, body.y, body.width, body.height);
+		if(showCopperSide) {
+			g.setColor(copperColor);
+			g.fillRect(body.x, body.y, body.width, body.height);
+		}else {			
+			g.setColor(background_color);
+			g.fillRect(body.x, body.y, body.width, body.height);
+		}
+		g.setColor(Color.GREEN);
+		g.drawRect(body.x, body.y, body.width, body.height);
+		
+		g.setColor(Color.white);
+		g.drawString(name, getBody().x-10, getBody().y-5);
+		
+		for(int i : pins.keySet()) {
+			pins.get(i).render(g);
+		}
 		
 		//Render Komponenten
 		if(ecomps.isEmpty() == false) {			
@@ -74,6 +105,14 @@ public class CircuitBoard extends EComp{
 	public Rectangle getBounds() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public void mousePressed(MouseEvent e) {
+		for(int i : pins.keySet()) {
+			if(pins.get(i).getBody().intersects(new Rectangle(e.getPoint()))) {
+				pins.get(i).setConnection(true, null);
+			}
+		}
 	}
 	
 }

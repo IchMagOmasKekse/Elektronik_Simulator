@@ -1,8 +1,12 @@
 package me.xxfreakdevxx.de.game;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
@@ -16,11 +20,17 @@ public class Game extends Canvas implements Runnable {
 	public static int windowWidth = 1200;
 	public static int windowHeight = 900;
 	
+	/* FPS */
+	public static int fps = 0;
+	public int maxFps = -1;
+	public static int gameTicks = 3;
+	private int ticks = 0;	
+	
 	private boolean isRunning = false;
 	private Thread thread;
 	private Handler handler;
 	private BufferedImage level = null;
-	private Camera camera;
+	public static Camera camera;
 	private TextureAtlas textureAtlas;
 	public static final int blocksize = 32;
 	
@@ -44,6 +54,8 @@ public class Game extends Canvas implements Runnable {
 		textureAtlas = new TextureAtlas();
 		this.addKeyListener(new KeyInput(handler));
 		this.addMouseListener(new MouseInput());
+		this.addMouseMotionListener(new MouseMotion());
+		this.addMouseWheelListener(new MouseWheelInput());
 
 		preInit();
 		init();
@@ -89,19 +101,26 @@ public class Game extends Canvas implements Runnable {
 		long timer = System.currentTimeMillis();
 		int frames = 0;
 		while(isRunning) {
-			long now = System.nanoTime();
-			delta += (now - lastTime) / ns;
-			lastTime = now;
-			while(delta >= 1) {
-				tick();
-				//update++;
-				delta--;
-			}
-			render();
-			frames++;
-			
+				long now = System.nanoTime();
+				delta += (now - lastTime) / ns;
+				lastTime = now;
+				while(delta >= gameTicks) {
+					tick();
+					//update++;
+					delta--;
+				}
+				if(maxFps < 0) {
+					render();
+					frames++;
+				}else{
+					if((frames < maxFps)) {
+						render();
+						frames++;				
+					}
+				}
 			if(System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
+				fps=frames;
 				frames = 0;
 			}
 		}
@@ -109,10 +128,14 @@ public class Game extends Canvas implements Runnable {
 	}
 	
 	public void tick() {
+		windowWidth = Window.frame.getWidth();
+		windowHeight = Window.frame.getHeight();
 		for(int i = 0; i < handler.object.size(); i++) {
 			
 		}
 		handler.tick();
+		
+		if(MouseInput.rightclick) camera.tickMouse();
 	}
 	public void render() {
 		BufferStrategy bs = this.getBufferStrategy();
@@ -122,12 +145,27 @@ public class Game extends Canvas implements Runnable {
 		}
 		Graphics g = bs.getDrawGraphics();
 		Graphics2D g2d = (Graphics2D) g;
+		Graphics2D g2gui = (Graphics2D) bs.getDrawGraphics();
 		g.setColor(Color.GRAY);
 		g.fillRect(0, 0, windowWidth, windowHeight);
 		g2d.translate(-camera.getX(), -camera.getY());
+		g2d.scale(ShowRoom.zoom, ShowRoom.zoom);
 		
 		handler.render(g);
 		g2d.translate(camera.getX(), camera.getY());
+		g2gui.setColor(Color.BLACK);
+		g2gui.fillRect(15, 5, 100, 70);
+		g2gui.setColor(Color.WHITE);
+		g2gui.drawString("FPS: "+fps, 20, 20);
+		g2gui.setColor(Color.WHITE);
+		g2gui.drawString("Zoom: "+ShowRoom.zoom, 20, 35);
+		g2gui.setColor(Color.WHITE);
+		g2gui.drawString("offX: "+ShowRoom.getMouseOffsetX(), 20, 50);
+		g2gui.setColor(Color.WHITE);
+		g2gui.drawString("offY: "+ShowRoom.getMouseOffsetY(), 20, 65);
+		
+		g2gui.drawLine(MouseMotion.mouse_x-100, MouseMotion.mouse_y, MouseMotion.mouse_x+100, MouseMotion.mouse_y);
+		g2gui.drawLine(MouseMotion.mouse_x, MouseMotion.mouse_y-100, MouseMotion.mouse_x, MouseMotion.mouse_y+100);
 		
 		g.dispose();
 		bs.show();
@@ -158,8 +196,11 @@ public class Game extends Canvas implements Runnable {
 		return handler;
 	}
 	
-	public Camera getCamera() {
-		return camera;
+	public static int calculateStringWidth(Font font, String enteredText) {
+		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+		FontMetrics fm = img.getGraphics().getFontMetrics(font);
+		int width = fm.stringWidth(enteredText);
+		return width;
 	}
 	
 }
