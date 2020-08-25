@@ -2,12 +2,17 @@ package me.xxfreakdevxx.de.game.showroom;
 
 import java.awt.Graphics;
 
+import me.xxfreakdevxx.de.game.objects.xcomponents.XManager;
+import me.xxfreakdevxx.de.game.uicomponents.CompList;
+
 public class ShowRoom {
 	
 	public static Scene scene = null;
-	public static double max_zoom = 5.0D;
+	public static double max_zoom = 15.0D;
 	public static double min_zoom = 0.2D;
 	public static double zoom = 1.0D;
+	
+	public static CompList complist = null;
 	
 	public ShowRoom() {
 		System.out.println("ShowRoom wird geladen...");
@@ -23,11 +28,13 @@ public class ShowRoom {
 		
 	}
 	public void postInit() {
-		
+		complist = new CompList("Elektronik Liste", 20, 0, 150, 600);
+		XManager.addComponent(complist);
 	}
 	
 	public static void render(Graphics g) {
 		if(scene !=  null) scene.render(g);
+//		if(complist !=  null) complist.render(g); //Aktivieren, um eine 2 Gui ansicht zu bekommen, die nicht mit der Kamera mitgeht
 	}
 	public static void tick() {
 		if(scene !=  null) scene.tick();
@@ -35,7 +42,7 @@ public class ShowRoom {
 
 	
 	/*
-	 * DIE OFFSETS MÜSSEN RICHTIG BERECHNET WERDEN ODER EIN ANDERER ALGORITHMUS MUSS HER
+	 * DIE OFFSETS Mï¿½SSEN RICHTIG BERECHNET WERDEN ODER EIN ANDERER ALGORITHMUS MUSS HER
 	 */
 	static double off = -10;
 	public static int getMouseOffsetX() {

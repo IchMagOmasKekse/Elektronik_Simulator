@@ -25,9 +25,9 @@ public class TextureAtlas {
 		return image;
 	}
 	public void reloadTextures() {
-		/* Lädt alle Texturen neu und fügt sie zum Atlas(textures(hashmap)) hinzu */
+		/* Lï¿½dt alle Texturen neu und fï¿½gt sie zum Atlas(textures(hashmap)) hinzu */
 		textures.clear();
-		textures.put("monster", loadImage("/monster.png"));
+//		textures.put("monster", loadImage("/monster.png"));
 	}
 	
 	public HashMap<String, BufferedImage> getTextures() {

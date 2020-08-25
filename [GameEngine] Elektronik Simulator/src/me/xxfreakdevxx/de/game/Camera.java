@@ -12,26 +12,26 @@ public class Camera {
 	}
 	
 	public void tick(EComp object) {
-		x += ((object.getLocation().getX() - x) - Game.windowWidth/2) * 0.05f;
-		y += ((object.getLocation().getY() - y) - Game.windowHeight/2) * 0.05f;
+		x += ((object.getLocation().getX() - x) - Simulator.windowWidth/2) * 0.05f;
+		y += ((object.getLocation().getY() - y) - Simulator.windowHeight/2) * 0.05f;
 		
 		if(stayPositiveCoords) {			
 			if(x <= 0) x = 0; 
-			if(x >= (Game.windowWidth + 32)) x = (Game.windowWidth+32);
+			if(x >= (Simulator.windowWidth + 32)) x = (Simulator.windowWidth+32);
 			if(y <= 0) y = 0; 
-			if(x >= (Game.windowHeight + 16)) x = (Game.windowHeight+16);
+			if(x >= (Simulator.windowHeight + 16)) x = (Simulator.windowHeight+16);
 		}
 	}
 	GameVector mouseMove = null;
 	public void tickMouse() {
-		x += ((MouseMotion.mouse_x) - Game.windowWidth/2) * 0.05f;
-		y += ((MouseMotion.mouse_y) - Game.windowHeight/2) * 0.05f;
+		x += ((MouseMotion.mouse_x) - Simulator.windowWidth/2) * 0.05f;
+		y += ((MouseMotion.mouse_y) - Simulator.windowHeight/2) * 0.05f;
 		
 		if(stayPositiveCoords) {			
 			if(x <= 0) x = 0; 
-			if(x >= (Game.windowWidth + 32)) x = (Game.windowWidth+32);
+			if(x >= (Simulator.windowWidth + 32)) x = (Simulator.windowWidth+32);
 			if(y <= 0) y = 0; 
-			if(x >= (Game.windowHeight + 16)) x = (Game.windowHeight+16);
+			if(x >= (Simulator.windowHeight + 16)) x = (Simulator.windowHeight+16);
 		}
 	}
 

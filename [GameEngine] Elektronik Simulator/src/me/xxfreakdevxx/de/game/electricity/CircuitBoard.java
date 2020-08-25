@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 
-import me.xxfreakdevxx.de.game.Game;
+import me.xxfreakdevxx.de.game.Simulator;
 import me.xxfreakdevxx.de.game.Location;
 
 public class CircuitBoard extends EComp{
@@ -19,7 +19,7 @@ public class CircuitBoard extends EComp{
 	
 	
 	public CircuitBoard(int pins_row, int pin_column) {
-		super(new Location((Game.windowWidth/2-(calcWidth(pins_row)/2)), (Game.windowHeight/2-(calcHeight(pin_column)/2))), calcWidth(pins_row), calcHeight(pin_column));
+		super(new Location((Simulator.windowWidth/2-(calcWidth(pins_row)/2)), (Simulator.windowHeight/2-(calcHeight(pin_column)/2))), calcWidth(pins_row), calcHeight(pin_column));
 		System.out.println("CircuitBoard wird geladen...");
 		this.pins_row = width / (Config.pin_size + Config.space_between_pins);
 		this.pins_column = height / (Config.pin_size + Config.space_between_pins);
@@ -113,6 +113,12 @@ public class CircuitBoard extends EComp{
 				pins.get(i).setConnection(true, null);
 			}
 		}
+	}
+
+	@Override
+	public void render(Graphics g, int x, int y, int width, int height) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

@@ -22,7 +22,7 @@ public class DebugScene extends Scene {
 		
 	}
 	public void postInit() {
-		addCircuitBoard(new CircuitBoard(30, 20));
+		addCircuitBoard(new CircuitBoard(10, 7));
 	}
 	
 	@Override

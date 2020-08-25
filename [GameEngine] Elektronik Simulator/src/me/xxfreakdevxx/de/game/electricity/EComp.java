@@ -6,25 +6,32 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
-import me.xxfreakdevxx.de.game.Game;
+import me.xxfreakdevxx.de.game.Simulator;
 import me.xxfreakdevxx.de.game.Location;
 import me.xxfreakdevxx.de.game.MouseMotion;
 import me.xxfreakdevxx.de.game.showroom.ShowRoom;
 
 public abstract class EComp {
 	/* EComp ist ein Elektrobauteil, das von anderen Klassen geerbt werden kann.
-	 * Z.b. bei Widerständen, Kondensatoren, Transistoren, Taster, Schalter */
+	 * Z.b. bei Widerstï¿½nden, Kondensatoren, Transistoren, Taster, Schalter */
 	protected Location location;
 	public Rectangle body = null;
+	public boolean isForPickList = false;
 	public static Color copperColor = new Color(255, 153, 0);
 	public int width=32;
-	protected int height=32;
+	public int height=32;
 	public float velX = 0;
 	public float velY = 0;
+	public double current_volt = 0d;
+	public double current_ohm = 10d;
+	public double current_ampere = 0d;
+	public double max_volt = 1d;
+	public double max_ampere = 0d;
 	protected BufferedImage texture;
 	public HashMap<Integer, Pin> pins = new HashMap<Integer, Pin>();
 	
 	public String name = "Unbenanntes Bauteil";
+	public String typeName = "Elektro Bauteil";
 	public boolean showPinNames = false;
 	
 	public EComp(Location location, int width, int height) {
@@ -36,6 +43,7 @@ public abstract class EComp {
 	
 	public abstract void tick();
 	public abstract void render(Graphics g);
+	public abstract void render(Graphics g, int x, int y, int width, int height);
 	public abstract void triggerPin(int pin_index, double volt, double ampere, double ohm);
 	public abstract Rectangle getBounds();
 
@@ -44,8 +52,9 @@ public abstract class EComp {
 		return location;
 	}
 
-	public void setLocation(Location location) {
+	public EComp setLocation(Location location) {
 		this.location = location;
+		return this;
 	}
 
 	public float getVelX() {
@@ -90,7 +99,7 @@ public abstract class EComp {
 		private Pin couplePin = null;
 		private EComp parent = null;
 		
-		/* Elektrizität */
+		/* Elektrizitï¿½t */
 		private double volt = 0.0d;
 		private double ampere = 0.0d;
 		private double ohm = 0.0d;
@@ -99,12 +108,12 @@ public abstract class EComp {
 			this.name = name;
 			this.body = new Rectangle(x, y, width, height);
 			this.parent = parent;
-			name_width = Game.calculateStringWidth(font, name);
+			name_width = Simulator.calculateStringWidth(font, name);
 		}
 		
 		public void tick() {
-			if(getBody().intersects(new Rectangle((int)(Game.camera.getX()+MouseMotion.mouse_x)-1+(ShowRoom.getMouseOffsetX()),
-					                              (int)(Game.camera.getY()+MouseMotion.mouse_y)-1+(ShowRoom.getMouseOffsetY()),
+			if(getBody().intersects(new Rectangle((int)(Simulator.camera.getX()+MouseMotion.mouse_x)-1+(ShowRoom.getMouseOffsetX()),
+					                              (int)(Simulator.camera.getY()+MouseMotion.mouse_y)-1+(ShowRoom.getMouseOffsetY()),
 					2,
 					2)))
 				setConnection(true,  null);

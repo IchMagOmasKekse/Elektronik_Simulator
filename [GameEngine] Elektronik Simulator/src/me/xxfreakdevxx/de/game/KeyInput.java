@@ -8,6 +8,8 @@ import me.xxfreakdevxx.de.game.showroom.ShowRoom;
 public class KeyInput extends KeyAdapter {
 	
 	Handler handler;
+	public static boolean isCTRL = false;
+	public static boolean isSHIFT = false;
 	
 	public KeyInput(Handler handler) {
 		this.handler = handler;
@@ -23,18 +25,35 @@ public class KeyInput extends KeyAdapter {
 			if(MouseInput.rightclick) {
 				MouseInput.rightclick = false;
 				ShowRoom.zoom = 1d;
-				Game.camera.setX(0);
-				Game.camera.setY(0);
+				Simulator.camera.setX(0);
+				Simulator.camera.setY(0);
 			}
 			break;
 		case KeyEvent.VK_P:
 			ShowRoom.scene.getCircuitBoard().showPinNames=!ShowRoom.scene.getCircuitBoard().showPinNames;
 			break;
+		case KeyEvent.VK_F3:
+			Simulator.showF3=!Simulator.showF3;
+			break;
+		case KeyEvent.VK_CONTROL:
+			isCTRL = true;
+			break;
+		case KeyEvent.VK_SHIFT:
+			isSHIFT = true;
+			break;
 		}
 	}
 	
 	public void keyReleased(KeyEvent e) {
-		int key = e.getKeyCode();		
+		int key = e.getKeyCode();
+		switch(e.getKeyCode()) {
+		case KeyEvent.VK_CONTROL:
+			isCTRL = false;
+			break;
+		case KeyEvent.VK_SHIFT:
+			isSHIFT = false;
+			break;
+		}
 	}
 	
 }
